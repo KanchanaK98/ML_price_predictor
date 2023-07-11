@@ -3,7 +3,6 @@ import "./Form.css";
 
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -12,17 +11,19 @@ export class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      submitted: false,
-      errmsg: ""
+      ram: "",
+      weight: "",
+      company: "",
+      type: "",
+      submitted : false,
+      touchscreen: false,
+      ips: false,
+      gpu:"",
+      OpSys:"",
+      cpu_name:""
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.keyCheck = this.keyCheck.bind(this);
-    this.passwordCheck = this.passwordCheck.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -31,65 +32,33 @@ export class Form extends Component {
     this.setState({ [name]: value });
   }
 
-  keyCheck(e) {
-    if (e.shiftKey || e.ctrlKey || e.altKey) {
-      e.preventDefault();
-    } else {
-      var key = e.keyCode;
-      if (
-        !(
-          key === 8 ||
-          key === 32 ||
-          key === 46 ||
-          (key >= 35 && key <= 40) ||
-          (key >= 65 && key <= 90)
-        )
-      ) {
-        e.preventDefault();
-      }
-    }
-  }
+  
 
-  passwordCheck(e) {
-    if (e.shiftKey || e.ctrlKey || e.altKey) {
-      e.preventDefault();
-    } else {
-      var key = e.keyCode;
-      if (
-        !(
-          key === 8 ||
-          key === 32 ||
-          key === 46 ||
-          (key >= 35 && key <= 40) ||
-          (key >= 65 && key <= 90) ||
-          (key >= 96 && key <= 105) ||
-          (key >= 48 && key <= 57)
-        )
-      ) {
-        e.preventDefault();
-      }
-    }
-  }
+  
 
   handleSubmit(event) {
     event.preventDefault();
     this.setState({ submitted: true });
-    const { firstname, lastname, email } = this.state;
+    const { ram, weight, company,type,touchscreen,ips,gpu,OpSys,cpu_name } = this.state;
 
     console.log(
-      "First Name: " +
-        firstname +
-        "Last Name: " +
-        lastname +
-        " " +
-        email +
-        " " +
-        "Password: It's Top Secret!"
+      "RAM: " +
+        ram +
+        "Weight: " +
+        weight +
+        " Company: " +
+        company +
+        " Type : "+ type+ 
+        " Touchscreen : "+touchscreen+
+        " IPS : "+ips+
+        " GPU : "+gpu+
+        " OpSys : "+OpSys+
+        " cpu_name "+cpu_name
     );
   }
 
   render() {
-    const { firstname, lastname, email, password, submitted } = this.state;
+    const { ram, weight, company, type,submitted, touchscreen,ips,gpu,OpSys,cpu_name } = this.state;
 
     return (
       <Container className="login-container">
@@ -102,33 +71,31 @@ export class Form extends Component {
           <Row>
             <Col sm={12} md={6}>
               <div className="form-group">
-                <label>RAM</label>
+                <label>RAM (GB)</label>
                 <input
                   type="text"
                   className="form-control"
-                  name="firstname"
-                  value={firstname}
+                  name="ram"
+                  value={ram}
                   onChange={this.handleChange}
-                  onKeyDown={this.keyCheck}
                 />
-                {submitted && !firstname && (
-                  <div className="error-block">First Name is required</div>
+                {submitted && !ram && (
+                  <div className="error-block">RAM value is required</div>
                 )}
               </div>
             </Col>
             <Col sm={12} md={6}>
               <div className="form-group">
-                <label>Weight</label>
+                <label>Weight (kg)</label>
                 <input
                   type="text"
                   className="form-control"
-                  name="lastname"
-                  value={lastname}
+                  name="weight"
+                  value={weight}
                   onChange={this.handleChange}
-                  onKeyDown={this.keyCheck}
                 />
-                {submitted && !lastname && (
-                  <div className="error-block">Last Name is required</div>
+                {submitted && !weight && (
+                  <div className="error-block">Weight is required</div>
                 )}
               </div>
             </Col>
@@ -137,46 +104,147 @@ export class Form extends Component {
             <Col sm={12} md={6}>
               <div className="form-group">
                 <label>Company</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  name="email"
-                  value={email}
-                  onChange={this.handleChange}
-                />
-                {submitted && !email && (
-                  <div className="error-block">Email is required</div>
+                <select
+                id="dropdown"
+                className="form-control"
+                name="company"
+                value={company}
+                onChange={this.handleChange}
+              >
+                <option value="">Choose an option</option>
+                <option value="Acer">Acer</option>
+                <option value="Apple">Apple</option>
+                <option value="Asus">Asus</option>
+                <option value="Dell">Dell</option>
+                <option value="HP">HP</option>
+                <option value="Lenovo">Lenovo</option>
+                <option value="MSI">MSI</option>
+                <option value="Toshiba">Toshiba</option>
+                <option value="Other">Other</option>
+              </select>
+                {submitted && !company && (
+                  <div className="error-block">company is required</div>
                 )}
-                {submitted &&
-                  email &&
-                  !email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) && (
-                    <div className="error-block">Email is not valid</div>
-                  )}
               </div>
             </Col>
             <Col sm={12} md={6}>
               <div className="form-group">
                 <label>Type</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  name="password"
-                  autoComplete="on"
-                  value={password}
-                  onChange={this.handleChange}
-                  onKeyDown={this.passwordCheck}
-                />
-                {submitted && !password && (
-                  <div className="error-block">Password is required </div>
+                <select
+                id="dropdown"
+                className="form-control"
+                name="type"
+                value={type}
+                onChange={this.handleChange}
+              >
+                <option value="">Choose an option</option>
+                <option value="2 in 1 Convertible">2 in 1 Convertible</option>
+                <option value="Gaming">Gaming</option>
+                <option value="Netbook">Netbook</option>
+                <option value="Notebook">Notebook</option>
+                <option value="Ultrabook">Ultrabook</option>
+                <option value="Workstation">Workstation</option>
+              </select>
+                {submitted && !type && (
+                  <div className="error-block">Type is required </div>
                 )}
-                {submitted && password && password.length <= 8 && (
-                  <div className="error-block">
-                    Password must contain 8 characters
-                  </div>
-                )}
+                
               </div>
             </Col>
           </Row>
+
+          <Row>
+            <Col sm={12} md={6}>
+            <div className="form-check">
+              <input className="form-check-input" id="gridCheck" name="touchscreen" disabled={ips}   onChange={()=>this.setState({touchscreen:!this.state.touchscreen})} checked={this.state.touchscreen} style ={{defaultChecked: this.state.touchscreen}} type="checkbox"/>
+              <label className="form-check-label" htmlFor="gridCheck">
+                Touch Screen
+              </label>
+            </div>
+            </Col>
+            <Col sm={12} md={6}>
+            <div className="form-check">
+              <input className="form-check-input" id="gridCheck" name="ips" disabled={touchscreen}  onChange={()=>this.setState({ips:!this.state.touchscreen})} checked={this.state.ips} style ={{defaultChecked: this.state.ips}} type="checkbox"/>
+              <label className="form-check-label" htmlFor="gridCheck">
+                IPS
+              </label>
+            </div>
+            </Col>
+          </Row>
+          <Row>
+          <Col sm={12} md={6}>
+              <div className="form-group">
+                <label>GPU</label>
+                <select
+                id="dropdown"
+                className="form-control"
+                name="gpu"
+                value={gpu}
+                onChange={this.handleChange}
+              >
+                <option value="">Choose an option</option>
+                <option value="AMD">AMD</option>
+                <option value="ARM">ARM</option>
+                <option value="Intel">Intel</option>
+                <option value="Nvidia">Nvidia</option>
+              </select>
+                {submitted && !gpu && (
+                  <div className="error-block">GPU is required </div>
+                )}
+                
+              </div>
+            </Col>
+            <Col sm={12} md={6}>
+              <div className="form-group">
+                <label>Operating System</label>
+                <select
+                id="dropdown"
+                className="form-control"
+                name="OpSys"
+                value={OpSys}
+                onChange={this.handleChange}
+              >
+                <option value="">Choose an option</option>
+                <option value="Linux">Linux</option>
+                <option value="Mac">Mac</option>
+                <option value="Windows">Windows</option>
+                <option value="Other">Other</option>
+              </select>
+                {submitted && !OpSys && (
+                  <div className="error-block">Operating System is required </div>
+                )}
+                
+              </div>
+            </Col>
+          </Row>
+          <Row>
+          <Col sm={12} md={6}>
+              <div className="form-group">
+                <label>CPU Name</label>
+                <select
+                id="dropdown"
+                className="form-control"
+                name="cpu_name"
+                value={cpu_name}
+                onChange={this.handleChange}
+              >
+                <option value="">Choose an option</option>
+                <option value="AMD">AMD</option>
+                <option value="Intel Core i3">Intel Core i3</option>
+                <option value="Intel Core i5">Intel Core i5</option>
+                <option value="Intel Core i7">Intel Core i7</option>
+                <option value="Other">Other</option>
+              </select>
+                {submitted && !cpu_name && (
+                  <div className="error-block">CPU Name is required </div>
+                )}
+                
+              </div>
+            </Col>
+          </Row>
+
+
+
           <Row>
             <Col>
               <div className="form-group button-section">
