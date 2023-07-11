@@ -41,6 +41,25 @@ export class Form extends Component {
     this.setState({ submitted: true });
     const { ram, weight, company,type,touchscreen,ips,gpu,OpSys,cpu_name } = this.state;
 
+    if(ram && weight && company && type && touchscreen || ips && gpu && OpSys && cpu_name)
+    {
+        /////// backend calling
+        this.setState({ram: "",
+        weight: "",
+        company: "",
+        type: "",
+        submitted : false,
+        touchscreen: false,
+        ips: false,
+        gpu:"",
+        OpSys:"",
+        cpu_name:""})
+      
+    }
+    else{
+      alert("Fill all the inputs!")
+    }
+
     console.log(
       "RAM: " +
         ram +
