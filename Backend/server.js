@@ -5,6 +5,7 @@ const app = express();
 require("dotenv").config();
 const fs = require('fs');
 const pickle = require('pickle');
+const { PythonShell } = require('python-shell');
 
 
 
@@ -13,29 +14,37 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 const PORT = process.env.PORT || 8070;
 
-// Define your API endpoint(s)
+
 app.post('/predict', (req, res) => {
-    const datas = [8, 1.3, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0]
-    fs.readFile('predictor.pickle', (err, data) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Error loading model');
-            return;
-        }
+    const inputData = [16, 1.3, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0];
 
-        const model = pickle.loads(data);
+    const options = {
+        pythonPath: 'C:\\Python310\\python.exe', // Specify the path to your Python executable if needed
+        scriptPath: './', // Specify the path to your Python script
+        args: JSON.stringify(inputData)
+    };
+    try
+    {
+        console.log("Start try block ....")
+        PythonShell.run('prediction.py', options, (err, result) => {
+            console.log("start 2 .....")
+            if (err) {
+                console.log("errrrrrrrrrrrrrrrrrrrrrrrr");
+                console.log(err);
+                res.status(500).send('Error occurred during prediction');
+                return;
+            }
+    
+            const prediction = JSON.parse(result);
+            res.json({ prediction });
+            console.log("Prediction : "+prediction)
+        });
 
-        // Get the input data from the request body
-        // const inputData = req.body.data;
-        const inputData = datas
-
-        // Perform prediction using the loaded model
-        const prediction = model.predict([inputData]);
-
-        // Return the prediction result as the response
-        res.json({ prediction });
-        console.log(prediction)
-    });
+    }catch(e)
+    {
+        console.log("catch block : "+e);
+    }
+   
 });
 
 

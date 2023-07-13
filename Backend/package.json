@@ -4,7 +4,8 @@
   "description": "Backend of Price Detector Application",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "pickle": "^0.2.0"
+    "nodemon": "^3.0.1",
+    "pickle": "^0.2.0",
+    "python-shell": "^5.0.0",
+    "sklearn": "^0.3.0"
   }
 }
